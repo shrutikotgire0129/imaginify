@@ -1,5 +1,4 @@
-import { clerkClient } from "@clerk/nextjs/server";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { clerkClient, type WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { Webhook } from "svix";
@@ -45,7 +44,7 @@ export async function POST(req: Request) {
 
   // Verify the payload with the headers
   try {
-    const verifiedPayload = wh.verify(body, {
+    const verifiedPayload = await wh.verify(body, {
       "svix-id": svixId,
       "svix-timestamp": svixTimestamp,
       "svix-signature": svixSignature,
@@ -74,6 +73,10 @@ export async function POST(req: Request) {
       last_name,
       username,
     } = evt.data;
+    console.log("CLERK USER CREATED EVENT");
+    console.log("Clerk ID:", id);
+    console.log("Email:", email_addresses[0]?.email_address);
+    console.log("Username:", username);
 
     const user = {
       clerkId: id,
