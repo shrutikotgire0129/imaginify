@@ -39,10 +39,10 @@ export async function POST(req: Request) {
 
   try {
     evt = wh.verify(body, {
-      "svix-id": svixId,
-      "svix-timestamp": svixTimestamp,
-      "svix-signature": svixSignature,
-    }) as WebhookEvent;
+  "svix-id": svixId,
+  "svix-timestamp": svixTimestamp,
+  "svix-signature": svixSignature,
+}) as unknown as WebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
 
@@ -121,6 +121,11 @@ export async function POST(req: Request) {
   }
 
   if (eventType === "user.deleted") {
+    if (!id) {
+      return new Response("User ID is missing", {
+        status: 400,
+      });
+    }
     const deletedUser = await deleteUser(id);
 
     return NextResponse.json({
