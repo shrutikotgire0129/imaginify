@@ -108,13 +108,13 @@ declare type RemoveUrlQueryParams = {
 };
 
 declare type SearchParamProps = {
-  params: {
+  params: Promise<{
     id: string;
     type: TransformationTypeKey;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     [key: string]: string | string[] | undefined;
-  };
+  }>;
 };
 
 declare type TransformationFormProps = {
@@ -127,11 +127,19 @@ declare type TransformationFormProps = {
 };
 
 declare type TransformedImageProps = {
-  image: IImage;
+  image: ImageState;
   type: string;
   title: string;
   transformationConfig: Transformations | null;
   isTransforming: boolean;
   hasDownload?: boolean;
   setIsTransforming?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+type ImageState = {
+  title: string;
+  publicId: string;
+  width: number;
+  height: number;
+  secureURL: string;
 };
